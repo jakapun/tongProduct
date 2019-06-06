@@ -8,6 +8,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final formKey = GlobalKey<FormState>();
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
   String name, email, password;
 
   Widget uploadButton() {
@@ -28,8 +30,13 @@ class _RegisterState extends State<Register> {
   void uploadValueToFirebase() async {
     print('name = $name, email = $email, password = $password');
 
-    
-
+    await firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      print('upload Success');
+    }).catchError((String error) {
+      print('Error ==> $error');
+    });
   }
 
   Widget nameTextFromField() {
